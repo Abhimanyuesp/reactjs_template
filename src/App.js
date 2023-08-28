@@ -1,24 +1,27 @@
-import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, {Suspense} from 'react';
 import './App.css';
+import config from './config'
+import PageNotFound from './generalPages/Pagenotfound';
+import Home from './generalPages/Home';
+import UserLogin from './generalPages/Userlogin';
+const UserRoutes = React.lazy(() => import('./afterLoggedin/userroute/UserRoutes'));
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path={`${config.baseurl}`} element={<Home />} />
+          <Route path={`${config.baseurl}about`} element={<h1>Welcome to about page</h1>} />
+          <Route path={`${config.baseurl}login`} element={<UserLogin />} />
+          
+          <Route path={`${config.baseurl}${config.loginurl}/*`} element={<Suspense fallback={<div>Loading...</div>}> <UserRoutes /> </Suspense> } />
+          
+          <Route path={`/*`} element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
